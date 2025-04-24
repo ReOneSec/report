@@ -20,7 +20,7 @@ load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 API_ID = int(os.getenv('API_ID'))
 API_HASH = os.getenv('API_HASH')
-ADMIN_ID = int(os.getenv('ADMIN_ID'))
+ADMIN_IDS = [int(id.strip()) for id in os.getenv('ADMIN_IDS', '').split(',')]
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -55,7 +55,7 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def add_account(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != ADMIN_ID:
+    if update.effective_user.id not in ADMIN_IDS:
         await update.message.reply_text("❌ You are not authorized.")
         return ConversationHandler.END
     await update.message.reply_text("📲 Send phone number (with + country code):")
@@ -131,14 +131,14 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != ADMIN_ID:
+    if update.effective_user.id not in ADMIN_IDS:
         await update.message.reply_text("❌ You are not authorized.")
         return ConversationHandler.END
     await update.message.reply_text("🔗 Send @channelname to report:")
     return REPORT_TARGET
 
 async def get_report_target(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_user.id != ADMIN_ID:
+    if update.effective_user.id not in ADMIN_IDS:
         await update.message.reply_text("❌ You are not authorized.")
         return ConversationHandler.END
 
@@ -218,4 +218,4 @@ if __name__ == '__main__':
 
     logger.info("✅ Bot is running... Press Ctrl+C to stop.")
     app.run_polling()
-  
+    
