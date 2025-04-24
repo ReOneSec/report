@@ -1,4 +1,4 @@
-python-telegram-bot==20.0b3
+python-telegram-bot==20.0b0
 telethon==1.24.0
 python-dotenv==1.0.0
 aiohttp==3.8.1
